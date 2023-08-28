@@ -12,10 +12,14 @@ terraform {
 locals {
     # TODO This needs to have a random string component because bucket
     # names must be globally unique
-    
+
     terraform_state_bucket_name = "terraform_state_bucket"
     storage_location = "US-EAST1"
 }
+
+# This should be supplied from the command line via
+# the terraform-<operation>-wrapper.sh one-line (for now) scripts.
+# Do not enter interactively
 
 variable "project_id" {
     type = string
