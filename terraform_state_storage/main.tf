@@ -27,7 +27,7 @@ provider "google" {
 }
 
 # For now, while I'm using gcloud, get project ID from
-z# gcloud config get-value project
+# gcloud config get-value project
 
 resource "google_compute_project_metadata_item" "terraform_state_bucket_name" {
     key = "terraform_state_bucket_name"
