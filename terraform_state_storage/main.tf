@@ -10,39 +10,48 @@ terraform {
 }
 
 locals {
-    project_id = "portfolio-website-383014"
-    region = "US-EAST1"
-    # TODO correct capitalization if we are still using "zone"
-    zone = "us-east1-b"
     terraform_state_bucket_name = "terraform_state_bucket"
+    storage_location = "US-EAST1"
+}
+
+variable "project_id" {
+    type = string
 }
 
 provider "google" {
-    project = local.project_id
-    region = local.region
-    zone = local.zone
+    project = var.project_id
+    # No zone or region here because region and zone defined in
+    # provider generally apply only to Compute and possibly a few
+    # more esoteric services, and we are not
+    # using Compute.
 }
 
 # For now, while I'm using gcloud, get project ID from
-# gcloud compute project-info describe --format="value(name)"
-
-resource "google_compute_project_metadata_item" "region" {
-    key = "region"
-    value = local.region
-}
-
-resource "google_compute_project_metadata_item" "zone" {
-    key = "zone"
-    value = local.zone
-}
+z# gcloud config get-value project
 
 resource "google_compute_project_metadata_item" "terraform_state_bucket_name" {
     key = "terraform_state_bucket_name"
     value = local.terraform_state_bucket_name
 }
 
+resource "google_compute_project_metadata_item" "storage_location" {
+    key = "storage_location"
+    value = local.storage_location
+}
+
 resource "google_storage_bucket" "terraform_state_bucket" {
-    name = locals.terraform_state_bucket_name
+    name = local.terraform_state_bucket_name
+    # `force_destroy = false` prevents the bucket from being
+    # destroyed unless it is empty
     force_destroy = false
-    # TODO is location necessary if we are already putting region and zone in the provider?
+    location = local.storage_location 
+    storage_class = "STANDARD"
+    versioning {
+        enabled = true
+    }
+    # No need for encryption because GCP encrypts objects by default
+
+    # uniform_bucket_level_access disables ACLs, but these are only useful
+    # in legacy contexts and migrations from AWS
+    uniform_bucket_level_access = true
 }
