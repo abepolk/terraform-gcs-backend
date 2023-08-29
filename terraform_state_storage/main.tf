@@ -36,7 +36,7 @@ resource "random_id" "terraform_state_bucket_prefix" {
 
 resource "google_compute_project_metadata_item" "terraform_state_bucket_name" {
     key = "terraform_state_bucket_name"
-    value = ${random_id.terraform_state_bucket_prefix.hex}-${local.terraform_state_bucket_base_name}
+    value = "${random_id.terraform_state_bucket_prefix.hex}-${local.terraform_state_bucket_base_name}"
 }
 
 resource "google_compute_project_metadata_item" "storage_location" {
@@ -45,7 +45,7 @@ resource "google_compute_project_metadata_item" "storage_location" {
 }
 
 resource "google_storage_bucket" "terraform_state_bucket" {
-    name = ${random_id.terraform_state_bucket_prefix.hex}-${local.terraform_state_bucket_base_name}
+    name = "${random_id.terraform_state_bucket_prefix.hex}-${local.terraform_state_bucket_base_name}"
     # `force_destroy = false` prevents the bucket from being
     # destroyed unless it is empty
     force_destroy = false
