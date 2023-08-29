@@ -7,6 +7,10 @@ terraform {
         }
     }
     required_version = "~> 1.5.5"
+    # The only information to configure the backend is the bucket name,
+    # and we are getting that from project metadata and passing in through
+    # the CLI. Here we just say which backend we are using.
+    backend "gcs" {}
 }
 
 # This should be supplied from the command line via
