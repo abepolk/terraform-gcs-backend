@@ -10,10 +10,7 @@ terraform {
 }
 
 locals {
-    # TODO This needs to have a random string component because bucket
-    # names must be globally unique
-
-    terraform_state_bucket_name = "terraform_state_bucket"
+    terraform_state_bucket_base_name = "terraform-state-bucket"
     storage_location = "US-EAST1"
 }
 
@@ -33,12 +30,13 @@ provider "google" {
     # using Compute.
 }
 
-# For now, while I'm using gcloud, get project ID from
-# gcloud config get-value project
+resource "random_id" "terraform_state_bucket_prefix" {
+  byte_length = 8
+}
 
 resource "google_compute_project_metadata_item" "terraform_state_bucket_name" {
     key = "terraform_state_bucket_name"
-    value = local.terraform_state_bucket_name
+    value = ${random_id.terraform_state_bucket_prefix.hex}-${local.terraform_state_bucket_base_name}
 }
 
 resource "google_compute_project_metadata_item" "storage_location" {
@@ -47,7 +45,7 @@ resource "google_compute_project_metadata_item" "storage_location" {
 }
 
 resource "google_storage_bucket" "terraform_state_bucket" {
-    name = local.terraform_state_bucket_name
+    name = ${random_id.terraform_state_bucket_prefix.hex}-${local.terraform_state_bucket_base_name}
     # `force_destroy = false` prevents the bucket from being
     # destroyed unless it is empty
     force_destroy = false
