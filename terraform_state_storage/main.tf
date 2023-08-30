@@ -55,7 +55,7 @@ resource "google_storage_bucket" "terraform_state_bucket" {
     }
     # No need for encryption because GCP encrypts objects by default
 
-    # uniform_bucket_level_access disables ACLs, but these are only useful
+    # uniform_bucket_level_access disables ACLs, which are only useful
     # in legacy contexts and migrations from AWS
     uniform_bucket_level_access = true
 }
