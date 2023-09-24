@@ -30,6 +30,10 @@ provider "google" {
     # using Compute.
 }
 
-resource "random_id" "terraform_state_bucket_prefix" {
-  byte_length = 8
-}
+# resource "google_artifact_registry_repository" "test-nginx-html-repo" {
+#     location = var.location
+#     repository_id = "REPOSITORY"
+#     description = "DESCRIPTION"
+#     format = "apt"
+#     kms_key_name = "KEY"
+# }

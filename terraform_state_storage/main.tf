@@ -10,7 +10,7 @@ terraform {
 
 locals {
     terraform_state_bucket_base_name = "terraform-state-bucket"
-    storage_location = "US-EAST1"
+    location = "us-east1"
 }
 
 # This should be supplied from the command line via
@@ -38,9 +38,9 @@ resource "google_compute_project_metadata_item" "terraform_state_bucket_name" {
     value = "${random_id.terraform_state_bucket_prefix.hex}-${local.terraform_state_bucket_base_name}"
 }
 
-resource "google_compute_project_metadata_item" "storage_location" {
-    key = "storage_location"
-    value = local.storage_location
+resource "google_compute_project_metadata_item" "location" {
+    key = "location"
+    value = local.location
 }
 
 resource "google_storage_bucket" "terraform_state_bucket" {
@@ -48,7 +48,7 @@ resource "google_storage_bucket" "terraform_state_bucket" {
     # `force_destroy = false` prevents the bucket from being
     # destroyed unless it is empty
     force_destroy = false
-    location = local.storage_location 
+    location = upper(local.location)
     storage_class = "STANDARD"
     versioning {
         enabled = true
