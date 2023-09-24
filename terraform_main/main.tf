@@ -34,10 +34,9 @@ provider "google" {
     # using Compute.
 }
 
-# resource "google_artifact_registry_repository" "test-nginx-html-repo" {
-#     location = var.location
-#     repository_id = "REPOSITORY"
-#     description = "DESCRIPTION"
-#     format = "apt"
-#     kms_key_name = "KEY"
-# }
+resource "google_artifact_registry_repository" "test-nginx-html-repo" {
+    location = var.location
+    repository_id = "test-nginx-html-repo"
+    description = "A repo to test serving HTML from Nginx"
+    format = "docker"
+}
