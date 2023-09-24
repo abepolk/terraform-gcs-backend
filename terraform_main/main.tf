@@ -22,6 +22,10 @@ variable "project_id" {
     type = string
 }
 
+variable "location" {
+    type = string
+}
+
 provider "google" {
     project = var.project_id
     # No zone or region here because region and zone defined in
