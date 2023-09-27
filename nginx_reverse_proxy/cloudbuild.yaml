@@ -1,0 +1,13 @@
+# Most of this is from https://cloud.google.com/build/docs/deploying-builds/deploy-cloud-run
+
+steps:
+# Build the container image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', '${_IMAGE_NAME}', '.']
+# Push the container image to Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', '${_IMAGE_NAME}']
+substitutions:
+  _IMAGE_NAME: 'gcr.io/${PROJECT_ID}/test-image'
+
+# WAIT I SHOULD JUST BE ABLE TO USE A DOCKERFILE
