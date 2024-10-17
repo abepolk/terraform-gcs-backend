@@ -34,9 +34,23 @@ provider "google" {
     # using Compute.
 }
 
-resource "google_artifact_registry_repository" "test-nginx-html-repo" {
+###################################################
+#
+# Insert resources for the main infrastructure here
+#
+###################################################
+
+# For example:
+
+resource "random_id" "hello_world_id" {
+  byte_length = 8
+}
+
+resource "google_storage_bucket" "hello_world" {
+    name = "${random_id.hello_world_id.hex}-hello-world"
     location = var.location
-    repository_id = "test-nginx-html-repo"
-    description = "A repo to test serving HTML from Nginx"
-    format = "docker"
+    storage_class = "STANDARD"
+    # uniform_bucket_level_access disables ACLs, which are only useful
+    # in legacy contexts and migrations from AWS
+    uniform_bucket_level_access = true
 }
